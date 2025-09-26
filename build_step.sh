@@ -2,6 +2,6 @@
 
 echo "Build script"
 
-npm run build
+npm install
 
-npm run start-prod
+npm run build
