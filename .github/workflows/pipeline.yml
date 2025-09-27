@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  SKIP_COMMIT: ${{ contains(github.event.head_commit.message || '', '#skip') }}
+  SKIP_COMMIT: ${{ contains(github.event.head_commit.message, '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
@@ -35,7 +35,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
       - name: Trigger deployment
-        if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        if: ${{ github.event_name == 'push' && env.SKIP_COMMIT == 'false' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
   tag_release:
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        if: ${{ github.event_name == 'push' && env.SKIP_COMMIT == 'false' }}
         uses: anothrNick/github-tag-action@1.75.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Discord notification
-        if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        if: ${{ github.event_name == 'push' && env.SKIP_COMMIT == 'false' }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
