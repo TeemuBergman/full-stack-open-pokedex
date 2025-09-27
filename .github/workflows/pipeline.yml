@@ -10,7 +10,7 @@ on:
 
 env:
   COMMIT_MESSAGE: ${{ github.event.commits.*.message }}
-  SKIP_COMMIT: ${{ contains(env.COMMIT_MESSAGE, '#skip') }}
+  SKIP_COMMIT: ${{ contains(github.event.commits.*.message, '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
