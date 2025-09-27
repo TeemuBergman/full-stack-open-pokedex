@@ -9,7 +9,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  COMMIT_MESSAGE: ${{ github.event.commits.*.message }}
+  COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, ' ') }}
   SKIP_COMMIT: ${{ contains(github.event.commits.*.message, '#skip') }}
 
 jobs:
