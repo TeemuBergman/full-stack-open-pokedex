@@ -9,7 +9,8 @@ on:
     types: [opened, synchronize]
 
 env:
-  SKIP_COMMIT: ${{ contains(github.event.commits.*.message, '#skip') }}
+  COMMIT_MESSAGE: ${{ github.event.commits.*.message }}
+  SKIP_COMMIT: ${{ contains(env.COMMIT_MESSAGE, '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
@@ -62,5 +63,5 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          title: ${{ github.event.commits.*.message }}
+          title: ${{ env.COMMIT_MESSAGE }}
           nodetail: true
