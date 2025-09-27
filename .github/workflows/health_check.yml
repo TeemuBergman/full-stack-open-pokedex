@@ -1,0 +1,13 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health_check:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check the health of the Render service
+        run: curl --fail https://full-stack-open-pokedex-mj6x.onrender.com/health
