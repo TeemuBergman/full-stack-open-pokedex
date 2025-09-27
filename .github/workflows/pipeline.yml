@@ -9,7 +9,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  SKIP_COMMIT: ${{ contains(github.event.commits.*.message, '#skip') }}
+  SKIP_COMMIT: ${{ contains(github.event.head_commit.message, '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Discord notification
-        if: ${{ always() && github.ref_name == 'main' }}
+        if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
