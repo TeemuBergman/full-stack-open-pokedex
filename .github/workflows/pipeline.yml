@@ -49,3 +49,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           TAG_PREFIX: v
+
+  discord_notify:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Discord Webhook Notify
+        # if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        if: ${{ env.SKIP_COMMIT }}
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
