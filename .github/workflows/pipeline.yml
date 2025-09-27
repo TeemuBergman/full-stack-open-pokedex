@@ -55,9 +55,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Discord Webhook Notify
+      - name: Discord notification
         # if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
         if: ${{ env.SKIP_COMMIT }}
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.4.0
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
