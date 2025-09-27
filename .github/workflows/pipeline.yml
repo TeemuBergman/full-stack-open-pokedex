@@ -55,7 +55,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Discord notification
-        if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        # if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
+        if: ${{ env.SKIP_COMMIT }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
