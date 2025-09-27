@@ -51,13 +51,19 @@ jobs:
           TAG_PREFIX: v
 
   discord_notify:
-    needs: [tag_release]
+    needs: [simple_deployment_pipeline]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
       - name: Discord notification
-        uses: sarisia/actions-status-discord@v1.15.4
-        # if: ${{ github.event_name == 'push' && !env.SKIP_COMMIT }}
-        if: ${{ env.SKIP_COMMIT }}
+        if: always()
+        uses: sarisia/actions-status-discord@v1
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          nodetail: true
+          status: ${{ job.status }}
+          color: ${{ job.status == 'success' && '0x00ff00' || '0xff0000' }}
+          title: ${{ job.status == 'success' && 'A new version deployed' || 'Build failed!' }}
+          description: |
+            **Commit:** [${{ github.sha }}](${{ github.event.head_commit.url }})  
+            **Author:** ${{ github.event.head_commit.author.name }}  
+            **Message:** ${{ github.event.head_commit.message }}
