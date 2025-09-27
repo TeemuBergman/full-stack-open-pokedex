@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  SKIP_COMMIT: ${{ contains(github.event.pull_request.title, '#skip') }}
+  SKIP_COMMIT: ${{ contains(github.event.head_commit.message || '', '#skip') }}
 
 jobs:
   simple_deployment_pipeline:
