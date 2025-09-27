@@ -2,8 +2,7 @@ name: Deployment pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
     branches: [main]
     types: [opened, synchronize]
@@ -21,7 +20,7 @@ jobs:
           node-version: '20'
       - name: Commit messages
         env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.pull_request.title) }}
+          COMMIT_MESSAGES: ${{ github.event.head_commit.message }}
         run: echo "$COMMIT_MESSAGES" ; echo "$SKIP_COMMIT"
       - name: Install dependencies
         run: npm ci
