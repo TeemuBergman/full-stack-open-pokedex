@@ -9,7 +9,6 @@ on:
     types: [opened, synchronize]
 
 env:
-  COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, ' ') }}
   SKIP_COMMIT: ${{ contains(github.event.commits.*.message, '#skip') }}
 
 jobs:
@@ -62,6 +61,3 @@ jobs:
         if: ${{ env.SKIP_COMMIT }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ job.status }}
-          title: ${{ env.COMMIT_MESSAGE }}
-          nodetail: true
